@@ -2,6 +2,7 @@ package com.amp.sample_travel.Repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -27,6 +28,7 @@ public class TravelDataRepository {
     private static TravelDataRepository Instance = null;
     private ApiInterface apiInterface;
     private LiveData<List<LocationData>> savedData;
+    private MutableLiveData<Boolean> loadingState;
     private TravelDao travelDao;
     private Context mContext;
 
@@ -36,6 +38,7 @@ public class TravelDataRepository {
         travelDao = db.dataDao();
         savedData = travelDao.getAllSavedData();
         mContext = application.getApplicationContext();
+        loadingState = new MutableLiveData<>();
     }
 
     public static TravelDataRepository getInstance(Application application) {
@@ -51,9 +54,11 @@ public class TravelDataRepository {
     public void getAllData() {
 
         Call<ApiResponse> call = apiInterface.getAllData();
+        loadingState.postValue(true);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                loadingState.postValue(false);
                 if (response.code() == 200) {
                     insertData(response.body().getLocations());
                     SharedPreferencesUtils.setParam(mContext, SharedPreferencesUtils.CUSTOMER_NAME, response.body().getCust_name());
@@ -62,7 +67,7 @@ public class TravelDataRepository {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                loadingState.postValue(false);
             }
         });
 
@@ -76,6 +81,10 @@ public class TravelDataRepository {
     public void updateData(LocationData locationData) {
 
         new updateAsyncTask(travelDao).execute(locationData);
+    }
+
+    public MutableLiveData<Boolean> getLoadingState() {
+        return loadingState;
     }
 
 

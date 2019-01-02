@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.amp.sample_travel.Activities.DetailviewActivity">
+    tools:context=".UI.Activities.DetailviewActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

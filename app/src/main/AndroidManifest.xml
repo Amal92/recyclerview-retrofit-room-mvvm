@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.Activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".Activities.DetailviewActivity"
+            android:name=".UI.Activities.DetailviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
 

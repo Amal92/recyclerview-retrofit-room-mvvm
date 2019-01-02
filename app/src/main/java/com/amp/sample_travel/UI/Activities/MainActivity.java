@@ -1,4 +1,4 @@
-package com.amp.sample_travel;
+package com.amp.sample_travel.UI.Activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
-import com.amp.sample_travel.Adapters.TravelListAdapter;
 import com.amp.sample_travel.Models.LocationData;
+import com.amp.sample_travel.R;
+import com.amp.sample_travel.UI.Adapters.TravelListAdapter;
 import com.amp.sample_travel.ViewModels.TravelDataViewModel;
 
 import java.util.List;
@@ -22,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.travel_list)
     RecyclerView travel_list;
+
+    @BindView(R.id.progress)
+    ProgressBar progressBar;
 
     private TravelDataViewModel travelDataViewModel;
     private TravelListAdapter travelListAdapter;
@@ -44,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
                     else
                         travelListAdapter.setData(locationData);
                 }
+            }
+        });
+        travelDataViewModel.getLoadingState().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean)
+                    progressBar.setVisibility(View.VISIBLE);
+                else progressBar.setVisibility(View.GONE);
             }
         });
     }

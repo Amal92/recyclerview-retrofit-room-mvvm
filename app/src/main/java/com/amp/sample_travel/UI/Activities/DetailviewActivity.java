@@ -1,4 +1,4 @@
-package com.amp.sample_travel.Activities;
+package com.amp.sample_travel.UI.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

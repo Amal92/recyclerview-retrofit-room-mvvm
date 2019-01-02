@@ -1,4 +1,4 @@
-package com.amp.sample_travel.Adapters;
+package com.amp.sample_travel.UI.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amp.sample_travel.Activities.DetailviewActivity;
 import com.amp.sample_travel.Models.LocationData;
 import com.amp.sample_travel.R;
+import com.amp.sample_travel.UI.Activities.DetailviewActivity;
 import com.amp.sample_travel.Utils.SharedPreferencesUtils;
 import com.amp.sample_travel.ViewModels.TravelDataViewModel;
 import com.bumptech.glide.Glide;
