@@ -1,15 +1,32 @@
 package com.amp.sample_travel.Models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 /**
  * Created by amal on 02/01/19.
  */
 
+@Entity(tableName = "travel_table")
 public class LocationData {
+
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private int _id;
     private String place;
     private String url;
     private String date;
     private int rate;
     private String description;
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     public String getPlace() {
         return place;
