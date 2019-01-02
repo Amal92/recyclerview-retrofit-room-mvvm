@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sample_travel</string>
+    <string name="welcome_to_travelmate">Welcome to travelMate</string>
 </resources>

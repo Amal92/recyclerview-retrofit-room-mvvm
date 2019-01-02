@@ -2,6 +2,7 @@ package com.amp.sample_travel.Repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.amp.sample_travel.Database.TravelDao;
@@ -10,6 +11,7 @@ import com.amp.sample_travel.Models.LocationData;
 import com.amp.sample_travel.Models.Response.ApiResponse;
 import com.amp.sample_travel.Networking.ApiInterface;
 import com.amp.sample_travel.Networking.RetrofitApiClient;
+import com.amp.sample_travel.Utils.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -26,12 +28,14 @@ public class TravelDataRepository {
     private ApiInterface apiInterface;
     private LiveData<List<LocationData>> savedData;
     private TravelDao travelDao;
+    private Context mContext;
 
     public TravelDataRepository(Application application) {
         this.apiInterface = RetrofitApiClient.getInstance().create(ApiInterface.class);
         TravelRoomDatabase db = TravelRoomDatabase.getDatabase(application);
         travelDao = db.dataDao();
         savedData = travelDao.getAllSavedData();
+        mContext = application.getApplicationContext();
     }
 
     public static TravelDataRepository getInstance(Application application) {
@@ -52,6 +56,7 @@ public class TravelDataRepository {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.code() == 200) {
                     insertData(response.body().getLocations());
+                    SharedPreferencesUtils.setParam(mContext, SharedPreferencesUtils.CUSTOMER_NAME, response.body().getCust_name());
                 }
             }
 

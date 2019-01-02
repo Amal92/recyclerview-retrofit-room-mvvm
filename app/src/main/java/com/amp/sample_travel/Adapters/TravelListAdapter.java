@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.amp.sample_travel.Models.LocationData;
 import com.amp.sample_travel.R;
+import com.amp.sample_travel.Utils.SharedPreferencesUtils;
 import com.amp.sample_travel.ViewModels.TravelDataViewModel;
 import com.bumptech.glide.Glide;
 
@@ -23,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by amal on 02/01/19.
  */
 
-public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.MyViewHolder> {
+public class TravelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<LocationData> locationDataArrayList;
@@ -35,22 +36,40 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.My
     }
 
     @Override
-    public TravelListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.travel_row, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
 
-        return new MyViewHolder(itemView);
+        if (viewType == 2) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.travel_row, parent, false);
+
+            viewHolder = new MyViewHolder(itemView);
+        } else {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_header, parent, false);
+
+            viewHolder = new MyHeaderViewHolder(itemView);
+        }
+
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(TravelListAdapter.MyViewHolder holder, int position) {
-        LocationData detail = locationDataArrayList.get(position);
-        holder.place_name.setText(detail.getPlace());
-        holder.time_tv.setText(detail.getDate());
-        if (detail.isFavourite())
-            holder.favourite_button.setImageResource(R.drawable.heart);
-        else holder.favourite_button.setImageResource(R.drawable.heart_outline);
-        Glide.with(mContext).load(detail.getUrl()).into(holder.poster_iv);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        if (viewHolder.getItemViewType() == 2) {
+            MyViewHolder holder = (MyViewHolder) viewHolder;
+            LocationData detail = locationDataArrayList.get(position);
+            holder.place_name.setText(detail.getPlace());
+            holder.time_tv.setText(detail.getDate());
+            if (detail.isFavourite())
+                holder.favourite_button.setImageResource(R.drawable.heart);
+            else holder.favourite_button.setImageResource(R.drawable.heart_outline);
+            Glide.with(mContext).load(detail.getUrl()).into(holder.poster_iv);
+        } else {
+            MyHeaderViewHolder holder = (MyHeaderViewHolder) viewHolder;
+            String customerName = (String) SharedPreferencesUtils.getParam(mContext, SharedPreferencesUtils.CUSTOMER_NAME, "");
+            holder.header_tv.setText(String.format("Hi %s,", customerName));
+        }
     }
 
     @Override
@@ -63,7 +82,26 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.My
 
     public void setData(List<LocationData> locationDataList) {
         locationDataArrayList = locationDataList;
+        locationDataArrayList.add(0, null);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (locationDataArrayList.get(position) == null)
+            return 1;
+        else return 2;
+    }
+
+    public class MyHeaderViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.header_tv)
+        TextView header_tv;
+
+        public MyHeaderViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
