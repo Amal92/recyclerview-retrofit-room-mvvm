@@ -19,6 +19,15 @@ public class LocationData {
     private String date;
     private int rate;
     private String description;
+    private boolean isFavourite = false;
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
 
     public int get_id() {
         return _id;

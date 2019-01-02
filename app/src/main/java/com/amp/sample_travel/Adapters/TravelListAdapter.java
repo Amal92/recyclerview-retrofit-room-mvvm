@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.amp.sample_travel.Models.LocationData;
 import com.amp.sample_travel.R;
+import com.amp.sample_travel.ViewModels.TravelDataViewModel;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -26,9 +27,11 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.My
 
     private Context mContext;
     private List<LocationData> locationDataArrayList;
+    private TravelDataViewModel travelDataViewModel;
 
-    public TravelListAdapter(Activity mContext) {
+    public TravelListAdapter(Activity mContext, TravelDataViewModel travelDataViewModel) {
         this.mContext = mContext;
+        this.travelDataViewModel = travelDataViewModel;
     }
 
     @Override
@@ -44,6 +47,9 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.My
         LocationData detail = locationDataArrayList.get(position);
         holder.place_name.setText(detail.getPlace());
         holder.time_tv.setText(detail.getDate());
+        if (detail.isFavourite())
+            holder.favourite_button.setImageResource(R.drawable.heart);
+        else holder.favourite_button.setImageResource(R.drawable.heart_outline);
         Glide.with(mContext).load(detail.getUrl()).into(holder.poster_iv);
     }
 
@@ -77,6 +83,24 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.My
         public MyViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            favourite_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (favourite_button.getDrawable().getConstantState() == mContext.getResources().getDrawable(R.drawable.heart).getConstantState()) {
+                        // remove from favourites
+                        favourite_button.setImageResource(R.drawable.heart_outline);
+                        LocationData locationData = locationDataArrayList.get(getAdapterPosition());
+                        locationData.setFavourite(false);
+                        travelDataViewModel.updateData(locationData);
+                    } else {
+                        //add to favourites
+                        favourite_button.setImageResource(R.drawable.heart);
+                        LocationData locationData = locationDataArrayList.get(getAdapterPosition());
+                        locationData.setFavourite(true);
+                        travelDataViewModel.updateData(locationData);
+                    }
+                }
+            });
         }
     }
 }
