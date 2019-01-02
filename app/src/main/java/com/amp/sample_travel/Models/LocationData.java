@@ -4,12 +4,14 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by amal on 02/01/19.
  */
 
 @Entity(tableName = "travel_table")
-public class LocationData {
+public class LocationData implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull

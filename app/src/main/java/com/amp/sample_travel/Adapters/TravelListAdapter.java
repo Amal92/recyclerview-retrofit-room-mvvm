@@ -2,6 +2,8 @@ package com.amp.sample_travel.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amp.sample_travel.Activities.DetailviewActivity;
 import com.amp.sample_travel.Models.LocationData;
 import com.amp.sample_travel.R;
 import com.amp.sample_travel.Utils.SharedPreferencesUtils;
@@ -107,16 +110,19 @@ public class TravelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.place_name)
-        public TextView place_name;
+        TextView place_name;
 
         @BindView(R.id.time_tv)
-        public TextView time_tv;
+        TextView time_tv;
 
         @BindView(R.id.favourite_button)
-        public ImageView favourite_button;
+        ImageView favourite_button;
 
         @BindView(R.id.poster_iv)
-        public ImageView poster_iv;
+        ImageView poster_iv;
+
+        @BindView(R.id.cardView)
+        CardView cardView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -137,6 +143,14 @@ public class TravelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         locationData.setFavourite(true);
                         travelDataViewModel.updateData(locationData);
                     }
+                }
+            });
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, DetailviewActivity.class);
+                    intent.putExtra("data", locationDataArrayList.get(getAdapterPosition()));
+                    mContext.startActivity(intent);
                 }
             });
         }

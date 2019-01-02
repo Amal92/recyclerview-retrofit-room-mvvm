@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">sample_travel</string>
-    <string name="welcome_to_travelmate">Welcome to travelMate</string>
+    <string name="welcome_to_travelmate">Welcome to TravelMate</string>
+    <string name="price_per_person">Price per person</string>
+    <string name="book_now">BOOK NOW</string>
+    <string name="Rs">\u20B9</string>
 </resources>
